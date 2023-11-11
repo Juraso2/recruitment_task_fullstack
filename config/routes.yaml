@@ -8,6 +8,25 @@ setupcheck:
     path: /api/setup-check
     controller: App\Controller\DefaultController::setupCheck
 
+exchange_rate_index:
+    path: /api/exchange-rates
+    controller: App\Controller\ExchangeRatesController::exchangeRateIndex
+    methods: GET
+
+exchange_rate_show:
+    path: /api/exchange-rates/{code}
+    controller: App\Controller\ExchangeRatesController::exchangeRateShow
+    methods: GET
+    requirements:
+        code: '[A-Z]{3}'
+
+exchange_rate_index_with_date:
+    path: /api/exchange-rates/{date}
+    controller: App\Controller\ExchangeRatesController::exchangeRateIndexWithDate
+    methods: GET
+    requirements:
+        date: '\d{4}-\d{2}-\d{2}'
+
 index:
     path: /{wildcard}
     defaults: {
