@@ -2,11 +2,14 @@
 
 namespace App\Service;
 
+use App\Exception\CurrencyHistoryNotFoundException;
 use App\Exception\CurrencyNotSupportedException;
 use App\Exception\RatesNotFoundException;
 use App\Exception\RatesWithDateNotFoundException;
+use App\Exception\WrongDateException;
 use App\Helper\NbpApiHelper;
 use App\Http\ApiClientInterface;
+use App\Model\Currency\CurrencyHistory;
 use App\Model\Currency\CurrencyInterface;
 
 class CurrencyService
@@ -87,12 +90,51 @@ class CurrencyService
         return $currencies;
     }
 
+    /**
+     * @throws WrongDateException
+     * @throws CurrencyHistoryNotFoundException
+     */
+    public function fetchCurrencyHistory(string $code, string $endDate): ?CurrencyInterface
+    {
+        try {
+            $date = new \DateTime($endDate);
+            $endingDate = $date->format('Y-m-d');
+            $startingDate = $date->modify('-15 day')->format('Y-m-d');
+        } catch (\Exception $e) {
+            throw new WrongDateException($endDate);
+        }
+
+        try {
+            $apiUrl = $this->nbpApiHelper->getApiUrlWithDateRangeAndCode($code, $startingDate, $endingDate);
+            $response = $this->apiClient->fetch($apiUrl);
+
+            $currency = $this->iterateHistoricalRates($response);
+        } catch (\Exception $e) {
+            throw new CurrencyHistoryNotFoundException($code, $endDate);
+        }
+
+        return $currency;
+    }
+
+    private function iterateHistoricalRates($history): ?CurrencyInterface
+    {
+        if (!array_key_exists($history['code'], $this->currencies)) {
+            return null;
+        }
+
+        $currency = $this->currencies[$history['code']];
+
+        $this->prepareCurrencyHistory($currency, $history);
+
+        return $currency;
+    }
+
     private function iterateRates($rates): array
     {
         $currencies = [];
 
         foreach ($rates as $currencyData) {
-            if(!array_key_exists($currencyData['code'], $this->currencies)) {
+            if (!array_key_exists($currencyData['code'], $this->currencies)) {
                 continue;
             }
 
@@ -104,6 +146,23 @@ class CurrencyService
         }
 
         return $currencies;
+    }
+
+    private function prepareCurrencyHistory(CurrencyInterface $currency, array $currencyData): void
+    {
+        $currency->setName($currencyData['currency']);
+
+        $rates = array_column($currencyData['rates'], 'effectiveDate');
+        array_multisort($rates, SORT_DESC, $currencyData['rates']);
+
+        foreach ($currencyData['rates'] as $rate) {
+            $currencyHistory = new CurrencyHistory($rate['effectiveDate'], $rate['mid']);
+            $currencyHistory->setPurchaseRate($rate['mid'], $currency::PURCHASE_RATE);
+            $currencyHistory->setSellRate($rate['mid'], $currency::SELL_RATE);
+
+            $currency->addHistory($currencyHistory);
+        }
+
     }
 
     private function prepareCurrency(CurrencyInterface $currency, array $currencyData): void
