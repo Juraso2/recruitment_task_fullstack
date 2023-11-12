@@ -3,8 +3,15 @@ import PropTypes from "prop-types";
 import Skeleton from "../Skeleton";
 import ArrowIndicator from "../ArrowIndicator";
 import Tooltip from "../Tooltip";
+import useEventBus from "../../hooks/useEventBus";
 
 const TableRow = ({date, currency, todayCurrency}) => {
+    const eventBus = useEventBus()
+
+    const handleHistoricalRatesClick = () => {
+        eventBus.emit('showHistoricalRates', {currency, date})
+    }
+
     return (
         <Fragment>
             <tr>
@@ -79,7 +86,6 @@ const TableRow = ({date, currency, todayCurrency}) => {
                 </td>
 
                 <td>
-
                     {currency.isSellable ?
                         <>
                             <div className="text-muted small">Today</div>
@@ -95,7 +101,7 @@ const TableRow = ({date, currency, todayCurrency}) => {
 
                 <td className="align-middle" align="center">
                     <Tooltip text="Historical rates">
-                        <button className="btn btn-primary">
+                        <button className="btn btn-primary" onClick={handleHistoricalRatesClick}>
                             <i className="fa fa-history" aria-hidden="true"></i>
                         </button>
                     </Tooltip>

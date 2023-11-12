@@ -4,7 +4,11 @@ import PropTypes from "prop-types";
 const ArrowIndicator = ({from, to}) => {
     const diff = from - to
 
-    if (diff === 0) return null
+    if (diff === 0) return (
+        <span className="mr-1 text-muted">
+            <i className="fa fa-minus" aria-hidden="true"/>
+        </span>
+    )
 
     const className = diff > 0 ? 'text-success' : 'text-danger'
 
