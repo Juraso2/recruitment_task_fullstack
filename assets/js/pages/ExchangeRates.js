@@ -24,7 +24,7 @@ const ExchangeRates = () => {
     }
 
     useEffect(() => {
-        if(prevDate === date) {
+        if (prevDate === date) {
             return
         }
 
@@ -32,31 +32,33 @@ const ExchangeRates = () => {
         setPrevDate(date)
     }, [date])
 
-    return (<section className="row-section">
-        <div className="container-fluid px-4 pb-5">
-            <div className="row no-gutters mt-5">
-                <div className="col-md-12">
-                    <h1 className="text-center">Exchange Rates</h1>
+    return (
+        <section className="row-section">
+            <div className="container-fluid px-4 pb-5">
+                <div className="row no-gutters mt-5">
+                    <div className="col-md-12">
+                        <h1 className="text-center">Exchange Rates</h1>
+                    </div>
+
+                    <Search
+                        label="Date"
+                        value={date}
+                        onChange={handleDateChange}
+                    />
+
+                    <Table
+                        historicalCurrencies={historicalCurrencies || []}
+                        todayCurrencies={todayCurrencies || []}
+                        isLoading={historicalLoading}
+                        date={date}
+                    />
+
+                    {historicalError &&
+                        <div className="col-12 alert alert-danger mt-3 px-3" role="alert">{historicalError}</div>}
                 </div>
-
-                <Search
-                    label="Date"
-                    value={date}
-                    onChange={handleDateChange}
-                />
-
-                <Table
-                    historicalCurrencies={historicalCurrencies || []}
-                    todayCurrencies={todayCurrencies || []}
-                    isLoading={historicalLoading}
-                    date={date}
-                />
-
-                {historicalError &&
-                    <div className="col-12 alert alert-danger mt-3 px-3" role="alert">{historicalError}</div>}
             </div>
-        </div>
-    </section>)
+        </section>
+    )
 }
 
 export default ExchangeRates

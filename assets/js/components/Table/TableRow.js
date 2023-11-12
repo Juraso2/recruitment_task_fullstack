@@ -1,45 +1,52 @@
 import React, {Fragment} from "react";
 import PropTypes from "prop-types";
 import Skeleton from "../Skeleton";
+import ArrowIndicator from "../ArrowIndicator";
 
 const TableRow = ({date, currency, todayCurrency}) => {
     return (
         <Fragment>
             <tr>
-                <td rowSpan="2" className="align-middle" align="center">
+                <td className="align-middle" align="center">
                     {currency.name}
                 </td>
-                <td rowSpan="2" className="align-middle" align="center">
+
+                <td className="align-middle" align="center">
                     <strong>{currency.code}</strong>
                 </td>
+
                 <td>
                     <div className="text-muted small">{date}</div>
+
+                    <ArrowIndicator
+                        from={currency.exchangeRate || 0}
+                        to={todayCurrency && todayCurrency.exchangeRate || 0}
+                    />
+
                     {currency.exchangeRate}
                 </td>
+
+                <td>
+                    <div className="text-muted small">Today</div>
+                    {todayCurrency && todayCurrency.exchangeRate || '-'}
+                </td>
+
                 <td>
                     {currency.isPurchasable ?
                         <>
                             <div className="text-muted small">{date}</div>
+
+                            <ArrowIndicator
+                                from={currency.purchaseRate || 0}
+                                to={todayCurrency && todayCurrency.purchaseRate || 0}
+                            />
+
                             {currency.purchaseRate || '-'}
                         </>
                         : '-'
                     }
                 </td>
-                <td>
-                    {currency.isSellable ?
-                        <>
-                            <div className="text-muted small">{date}</div>
-                            {currency.sellRate || '-'}
-                        </>
-                        : '-'
-                    }
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div className="text-muted small">Today</div>
-                    {todayCurrency && todayCurrency.exchangeRate || '-'}
-                </td>
+
                 <td>
                     {currency.isPurchasable ?
                         <>
@@ -53,7 +60,25 @@ const TableRow = ({date, currency, todayCurrency}) => {
                         : '-'
                     }
                 </td>
+
                 <td>
+                    {currency.isSellable ?
+                        <>
+                            <div className="text-muted small">{date}</div>
+
+                            <ArrowIndicator
+                                from={currency.sellRate || 0}
+                                to={todayCurrency && todayCurrency.sellRate || 0}
+                            />
+
+                            {currency.sellRate || '-'}
+                        </>
+                        : '-'
+                    }
+                </td>
+
+                <td>
+
                     {currency.isSellable ?
                         <>
                             <div className="text-muted small">Today</div>

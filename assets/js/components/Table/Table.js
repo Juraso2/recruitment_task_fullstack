@@ -6,14 +6,14 @@ import TableRow from "./TableRow";
 const Table = ({historicalCurrencies, todayCurrencies, isLoading, date}) => {
     return (
         <div className="table-responsive">
-            <table className="table table-bordered mb-0 bg-light">
+            <table className="table table-bordered table-hover mb-0 bg-light">
                 <thead className="thead-dark">
                 <tr>
                     <th>Currency</th>
                     <th>Code</th>
-                    <th>NBP Rate</th>
-                    <th>Buy Rate</th>
-                    <th>Sell Rate</th>
+                    <th colSpan="2">NBP Rate</th>
+                    <th colSpan="2">Buy Rate</th>
+                    <th colSpan="2">Sell Rate</th>
                 </tr>
                 </thead>
 
