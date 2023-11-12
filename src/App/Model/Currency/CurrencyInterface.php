@@ -10,19 +10,19 @@ interface CurrencyInterface
 
     public function setName(string $name): void;
 
-    public function getExchangeRate(): float;
+    public function getExchangeRate(): ?float;
 
     public function setExchangeRate(float $exchangeRate): void;
 
     public function isPurchasable(): bool;
 
-    public function getPurchaseRate(): float;
+    public function getPurchaseRate(): ?float;
 
     public function setPurchaseRate(float $purchaseRate): void;
 
     public function isSellable(): bool;
 
-    public function getSellRate(): float;
+    public function getSellRate(): ?float;
 
     public function setSellRate(float $sellRate): void;
 

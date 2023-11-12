@@ -67,15 +67,9 @@ class ExchangeRatesController extends AbstractController
     public function exchangeRateHistory(string $code, string $date): Response
     {
         try {
-            $currencies = $this->currencyService->fetchCurrencyHistory($code, $date);
+            $currency = $this->currencyService->fetchCurrencyHistory($code, $date);
 
-            dd($currencies);
-
-            $responseContent = [
-                'currencies' => $currencies
-            ];
-
-            return new JsonResponse($responseContent, Response::HTTP_OK);
+            return new JsonResponse($currency, Response::HTTP_OK);
         } catch (\Exception $e) {
             return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
         }

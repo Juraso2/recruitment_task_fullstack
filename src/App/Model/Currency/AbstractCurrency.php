@@ -29,7 +29,7 @@ abstract class AbstractCurrency implements CurrencyInterface, \JsonSerializable
         $this->name = $name;
     }
 
-    public function getExchangeRate(): float
+    public function getExchangeRate(): ?float
     {
         return $this->exchangeRate;
     }
@@ -44,7 +44,7 @@ abstract class AbstractCurrency implements CurrencyInterface, \JsonSerializable
         return false;
     }
 
-    public function getPurchaseRate(): float
+    public function getPurchaseRate(): ?float
     {
         return $this->purchaseRate;
     }
@@ -54,7 +54,7 @@ abstract class AbstractCurrency implements CurrencyInterface, \JsonSerializable
         return false;
     }
 
-    public function getSellRate(): float
+    public function getSellRate(): ?float
     {
         return $this->sellRate;
     }
@@ -79,6 +79,7 @@ abstract class AbstractCurrency implements CurrencyInterface, \JsonSerializable
             'purchaseRate' => $this->getPurchaseRate(),
             'isSellable' => $this->isSellable(),
             'sellRate' => $this->getSellRate(),
+            'history' => $this->getHistory(),
         ];
     }
 }
