@@ -7,8 +7,8 @@ use App\Helper\NumberHelper;
 class CZKCurrency extends abstractCurrency
 {
     protected const CODE = 'CZK';
-    protected const PURCHASE_RATE = 0.00;
-    protected const SELL_RATE = 0.15;
+    public const PURCHASE_RATE = 0.00;
+    public const SELL_RATE = 0.15;
 
     public function isSellable(): bool
     {

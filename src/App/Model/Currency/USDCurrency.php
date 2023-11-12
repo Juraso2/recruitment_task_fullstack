@@ -7,8 +7,8 @@ use App\Helper\NumberHelper;
 class USDCurrency extends AbstractCurrency
 {
     protected const CODE = 'USD';
-    protected const PURCHASE_RATE = -0.05;
-    protected const SELL_RATE = 0.07;
+    public const PURCHASE_RATE = -0.05;
+    public const SELL_RATE = 0.07;
 
     public function isPurchasable(): bool
     {

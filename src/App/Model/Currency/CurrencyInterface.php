@@ -25,4 +25,8 @@ interface CurrencyInterface
     public function getSellRate(): float;
 
     public function setSellRate(float $sellRate): void;
+
+    public function addHistory(CurrencyHistoryInterface $currencyHistory): void;
+
+    public function getHistory(): array;
 }

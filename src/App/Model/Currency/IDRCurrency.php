@@ -7,8 +7,8 @@ use App\Helper\NumberHelper;
 class IDRCurrency extends AbstractCurrency
 {
     protected const CODE = 'IDR';
-    protected const PURCHASE_RATE = 0.00;
-    protected const SELL_RATE = 0.15;
+    public const PURCHASE_RATE = 0.00;
+    public const SELL_RATE = 0.15;
 
     public function isSellable(): bool
     {

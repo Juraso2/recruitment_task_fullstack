@@ -5,13 +5,14 @@ namespace App\Model\Currency;
 abstract class AbstractCurrency implements CurrencyInterface, \JsonSerializable
 {
     protected const CODE = '';
-    protected const PURCHASE_RATE = 0.0;
-    protected const SELL_RATE = 0.0;
+    public const PURCHASE_RATE = 0.0;
+    public const SELL_RATE = 0.0;
 
     protected $name;
     protected $exchangeRate;
     protected $purchaseRate;
     protected $sellRate;
+    protected $history = [];
 
     public static function getCode(): string
     {
@@ -56,6 +57,16 @@ abstract class AbstractCurrency implements CurrencyInterface, \JsonSerializable
     public function getSellRate(): float
     {
         return $this->sellRate;
+    }
+
+    public function addHistory(CurrencyHistoryInterface $currencyHistory): void
+    {
+        $this->history[] = $currencyHistory;
+    }
+
+    public function getHistory(): array
+    {
+        return $this->history;
     }
 
     public function jsonSerialize(): array
