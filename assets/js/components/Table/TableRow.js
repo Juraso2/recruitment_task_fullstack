@@ -2,6 +2,7 @@ import React, {Fragment} from "react";
 import PropTypes from "prop-types";
 import Skeleton from "../Skeleton";
 import ArrowIndicator from "../ArrowIndicator";
+import Tooltip from "../Tooltip";
 
 const TableRow = ({date, currency, todayCurrency}) => {
     return (
@@ -93,14 +94,11 @@ const TableRow = ({date, currency, todayCurrency}) => {
                 </td>
 
                 <td className="align-middle" align="center">
-                    <button
-                        className="btn btn-primary"
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="History"
-                    >
-                        <i className="fa fa-history" aria-hidden="true"></i>
-                    </button>
+                    <Tooltip text="Historical rates">
+                        <button className="btn btn-primary">
+                            <i className="fa fa-history" aria-hidden="true"></i>
+                        </button>
+                    </Tooltip>
                 </td>
             </tr>
         </Fragment>
