@@ -91,6 +91,17 @@ const TableRow = ({date, currency, todayCurrency}) => {
                         : '-'
                     }
                 </td>
+
+                <td className="align-middle" align="center">
+                    <button
+                        className="btn btn-primary"
+                        data-toggle="tooltip"
+                        data-placement="top"
+                        title="History"
+                    >
+                        <i className="fa fa-history" aria-hidden="true"></i>
+                    </button>
+                </td>
             </tr>
         </Fragment>
     )

@@ -14,6 +14,7 @@ const Table = ({historicalCurrencies, todayCurrencies, isLoading, date}) => {
                     <th colSpan="2">NBP Rate</th>
                     <th colSpan="2">Buy Rate</th>
                     <th colSpan="2">Sell Rate</th>
+                    <th></th>
                 </tr>
                 </thead>
 
@@ -26,15 +27,18 @@ const Table = ({historicalCurrencies, todayCurrencies, isLoading, date}) => {
                             <td><Skeleton/></td>
                             <td><Skeleton/></td>
                             <td><Skeleton/></td>
-                        </tr>
-                        <tr>
-                            <td><Skeleton/></td>
-                            <td><Skeleton/></td>
-                            <td><Skeleton/></td>
-                            <td><Skeleton/></td>
                             <td><Skeleton/></td>
                         </tr>
                         <tr>
+                            <td><Skeleton/></td>
+                            <td><Skeleton/></td>
+                            <td><Skeleton/></td>
+                            <td><Skeleton/></td>
+                            <td><Skeleton/></td>
+                            <td><Skeleton/></td>
+                        </tr>
+                        <tr>
+                            <td><Skeleton/></td>
                             <td><Skeleton/></td>
                             <td><Skeleton/></td>
                             <td><Skeleton/></td>
