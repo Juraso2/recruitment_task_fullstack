@@ -1,12 +1,18 @@
-import React from "react"
+import React, {useState} from "react"
 import PropTypes from "prop-types";
 import useAlert from "../hooks/useAlert";
 
 const Search = ({label, value, onChange}) => {
     const { showAlert } = useAlert()
+    const [prevDate, setPrevDate] = useState(value)
 
     const handleDateChange = (event) => {
+        if (event.target.value === prevDate) {
+            return
+        }
+
         const day = new Date(event.target.value).getUTCDay()
+        setPrevDate(event.target.value)
 
         if (day === 0 || day === 6) {
             showAlert('Weekends are not allowed', 'danger')
