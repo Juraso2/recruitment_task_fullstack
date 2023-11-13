@@ -1,10 +1,13 @@
 import React from "react"
 import PropTypes from "prop-types";
 import DatePicker from "./DatePicker";
+import {useHistory} from "react-router-dom";
 
-const Search = ({label, value, onChange}) => {
+const Search = ({label, value}) => {
+    const history = useHistory()
+
     const handleChange = (date) => {
-        if (date) onChange(date)
+        if (date) history.push('/exchange-rates/' + date)
     }
 
     return (
@@ -19,7 +22,6 @@ const Search = ({label, value, onChange}) => {
 Search.propTypes = {
     label: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
 }
 
 export default Search

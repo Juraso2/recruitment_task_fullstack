@@ -1,23 +1,22 @@
 import React, {useEffect, useState} from 'react'
+import {useParams} from "react-router-dom";
 import Table from "../components/Table/Table"
 import Search from "../components/Search";
 import useAxiosWithAbort from "../hooks/useAxiosWithAbort";
-import {useHistory, useParams} from "react-router-dom";
 import useEventBus from "../hooks/useEventBus";
-import HistoryModal from "../components/HistoryModal";
+import HistoryModal from "../components/HistoryModal/HistoryModal";
 
 const baseUrl = 'http://telemedi-zadanie.localhost'
 
 const ExchangeRates = () => {
     const eventBus = useEventBus()
-    const history = useHistory()
     const {date} = useParams()
     const [prevDate, setPrevDate] = useState(date)
     const [showModal, setShowModal] = useState(false)
     const [historicalDate, setHistoricalDate] = useState(null)
     const [historicalCurrency, setHistoricalCurrency] = useState(null)
     const [{currencies: todayCurrencies}] = useAxiosWithAbort(baseUrl + `/api/exchange-rates`)
-    const [{currencies: historicalCurrencies}, historicalLoading, historicalError, historicalRefetch] = useAxiosWithAbort(baseUrl + `/api/exchange-rates/` + date)
+    const [{currencies}, islLoading, error, refetch] = useAxiosWithAbort(baseUrl + `/api/exchange-rates/` + date)
 
     const showHistoricalRates = ({currency, date}) => {
         setHistoricalCurrency(currency)
@@ -41,10 +40,6 @@ const ExchangeRates = () => {
         }, 300)
     }
 
-    const handleDateChange = (date) => {
-        if(date) history.push('/exchange-rates/' + date)
-    }
-
     useEffect(() => {
         eventBus.on('modalClosed', handleCloseModal)
         eventBus.on('showHistoricalRates', showHistoricalRates)
@@ -60,7 +55,7 @@ const ExchangeRates = () => {
             return
         }
 
-        historicalRefetch()
+        refetch()
         setPrevDate(date)
     }, [date])
 
@@ -72,21 +67,16 @@ const ExchangeRates = () => {
                         <h1 className="text-center">Exchange Rates</h1>
                     </div>
 
-                    <Search
-                        label="Selected date"
-                        value={date}
-                        onChange={handleDateChange}
-                    />
+                    <Search label="Selected date" value={date}/>
 
                     <Table
-                        historicalCurrencies={historicalCurrencies || []}
+                        historicalCurrencies={currencies || []}
                         todayCurrencies={todayCurrencies || []}
-                        isLoading={historicalLoading}
+                        isLoading={islLoading}
                         date={date}
                     />
 
-                    {historicalError &&
-                        <div className="col-12 alert alert-danger mt-3 px-3" role="alert">{historicalError}</div>}
+                    {error && <div className="col-12 alert alert-danger mt-3 px-3" role="alert">{error}</div>}
 
                     <HistoryModal
                         showModal={showModal}
