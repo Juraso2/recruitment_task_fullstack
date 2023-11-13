@@ -33,22 +33,6 @@ class ExchangeRatesController extends AbstractController
         }
     }
 
-    public function exchangeRateShow(string $code): Response
-    {
-        try {
-            $code = strtoupper($code);
-            $currency = $this->currencyService->fetchCurrency($code);
-
-            $responseContent = [
-                'currency' => $currency
-            ];
-
-            return new JsonResponse($responseContent, Response::HTTP_OK);
-        } catch (\Exception $e) {
-            return new JsonResponse(['message' => $e->getMessage()], Response::HTTP_NOT_FOUND);
-        }
-    }
-
     public function exchangeRateIndexWithDate(string $date): Response
     {
         try {

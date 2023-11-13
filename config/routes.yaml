@@ -13,13 +13,6 @@ exchange_rate_index:
     controller: App\Controller\ExchangeRatesController::exchangeRateIndex
     methods: GET
 
-exchange_rate_show:
-    path: /api/exchange-rates/{code}
-    controller: App\Controller\ExchangeRatesController::exchangeRateShow
-    methods: GET
-    requirements:
-        code: '[A-Z]{3}'
-
 exchange_rate_index_with_date:
     path: /api/exchange-rates/{date}
     controller: App\Controller\ExchangeRatesController::exchangeRateIndexWithDate
