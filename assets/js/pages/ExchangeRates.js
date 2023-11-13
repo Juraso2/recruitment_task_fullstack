@@ -4,7 +4,6 @@ import Search from "../components/Search";
 import useAxiosWithAbort from "../hooks/useAxiosWithAbort";
 import {useHistory, useParams} from "react-router-dom";
 import useEventBus from "../hooks/useEventBus";
-import Modal from "../components/Modal/Modal";
 import HistoryModal from "../components/HistoryModal";
 
 const baseUrl = 'http://telemedi-zadanie.localhost'
@@ -31,15 +30,19 @@ const ExchangeRates = () => {
         setShowModal(true)
     }
 
+    let timer = null
     const handleCloseModal = () => {
-        setHistoricalCurrency(null)
-        setHistoricalDate(null)
-
         setShowModal(false)
+
+        timer = setTimeout(() => {
+            setHistoricalCurrency(null)
+            setHistoricalDate(null)
+            clearTimeout(timer)
+        }, 300)
     }
 
     const handleDateChange = (date) => {
-        history.push('/exchange-rates/' + date)
+        if(date) history.push('/exchange-rates/' + date)
     }
 
     useEffect(() => {
@@ -70,7 +73,7 @@ const ExchangeRates = () => {
                     </div>
 
                     <Search
-                        label="Date"
+                        label="Selected date"
                         value={date}
                         onChange={handleDateChange}
                     />
