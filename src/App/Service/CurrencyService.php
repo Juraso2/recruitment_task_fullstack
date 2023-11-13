@@ -39,24 +39,6 @@ class CurrencyService
     }
 
     /**
-     * @throws CurrencyNotSupportedException
-     */
-    public function fetchCurrency(string $code): CurrencyInterface
-    {
-        if (!isset($this->currencies[$code])) {
-            throw new CurrencyNotSupportedException($code);
-        }
-
-        $apiUrl = $this->nbpApiHelper->getApiUrlWithCode($code);
-        $response = $this->apiClient->fetch($apiUrl);
-        $currency = $this->currencies[$code];
-
-        $this->prepareSingleCurrency($currency, $response);
-
-        return $currency;
-    }
-
-    /**
      * @throws RatesNotFoundException
      */
     public function fetchCurrencies(): array
