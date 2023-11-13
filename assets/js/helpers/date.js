@@ -14,15 +14,6 @@ export const isWeekend = (date) => {
     return day === 6 || day === 0
 }
 
-export const isLastDayOfMonth = (date) => {
-    const lastDayOfMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0)
-    return date.getDate() === lastDayOfMonth.getDate()
-}
-
-export const isFirstDayOfMonth = (date) => {
-    return date.getDate() === 1
-}
-
 export const findNextWorkingDay = (date) => {
     const nextDay = new Date(date)
     nextDay.setDate(nextDay.getDate() + 1)
