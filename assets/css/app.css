@@ -2,6 +2,10 @@ body {
     background-color: lightgray;
 }
 
+.flex-1 {
+    flex: 1;
+}
+
 .skeleton {
     background: lightgray;
     border-radius: 99px;
