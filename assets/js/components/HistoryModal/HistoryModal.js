@@ -1,9 +1,9 @@
 import React from "react";
-import Modal from "./Modal/Modal";
 import PropTypes from "prop-types";
-import useAxiosWithAbort from "../hooks/useAxiosWithAbort";
-import Skeleton from "./Skeleton";
-import ArrowIndicator from "./ArrowIndicator";
+import Modal from "../Modal/Modal";
+import Skeleton from "../Skeleton";
+import useAxiosWithAbort from "../../hooks/useAxiosWithAbort";
+import HistoryModalRow from "./HistoryModalRow";
 
 const baseUrl = 'http://telemedi-zadanie.localhost'
 
@@ -11,18 +11,6 @@ const HistoryModal = ({showModal, handleCloseModal, currency, date}) => {
     if (!currency || !date) return null
 
     const [currencyHistory, isLoading] = useAxiosWithAbort(baseUrl + `/api/exchange-rates/history/${currency.code}/${date}`)
-
-    const getRowClass = (row) => {
-        if (row.isHighest) {
-            return 'table-success'
-        }
-
-        if (row.isLowest) {
-            return 'table-danger'
-        }
-
-        return null
-    }
 
     return (
         <Modal size="lg" show={showModal} onClose={handleCloseModal}>
@@ -34,6 +22,7 @@ const HistoryModal = ({showModal, handleCloseModal, currency, date}) => {
                     <span aria-hidden="true">&times;</span>
                 </button>
             </Modal.Header>
+
             <Modal.Body>
                 <table className="table table-striped">
                     <thead>
@@ -63,42 +52,12 @@ const HistoryModal = ({showModal, handleCloseModal, currency, date}) => {
                     ) : (
                         <>
                             {currencyHistory.history.map((row, i) => (
-                                <tr key={row.date} className={getRowClass(row)}>
-                                    <td>{row.date}</td>
-                                    <td>
-                                        {i === currencyHistory.history.length - 1 ? (
-                                            <ArrowIndicator from={0} to={0}/>
-                                        ) : (
-                                            <ArrowIndicator
-                                                from={row.exchangeRate || 0}
-                                                to={currencyHistory.history[i + 1]?.exchangeRate || 0}
-                                            />
-                                        )}
-                                        {row.exchangeRate}
-                                    </td>
-                                    <td>
-                                        {i === currencyHistory.history.length - 1 ? (
-                                            <ArrowIndicator from={0} to={0}/>
-                                        ) : (
-                                            <ArrowIndicator
-                                                from={row.purchaseRate || 0}
-                                                to={currencyHistory.history[i + 1]?.purchaseRate || 0}
-                                            />
-                                        )}
-                                        {row.purchaseRate}
-                                    </td>
-                                    <td>
-                                        {i === currencyHistory.history.length - 1 ? (
-                                            <ArrowIndicator from={0} to={0}/>
-                                        ) : (
-                                            <ArrowIndicator
-                                                from={row.sellRate || 0}
-                                                to={currencyHistory.history[i + 1]?.sellRate || 0}
-                                            />
-                                        )}
-                                        {row.sellRate}
-                                    </td>
-                                </tr>
+                                <HistoryModalRow
+                                    key={row.date}
+                                    history={row}
+                                    previousHistory={currencyHistory.history[i + 1] || null}
+                                    isLast={i === currencyHistory.history.length - 1}
+                                />
                             ))}
                         </>
                     )}
