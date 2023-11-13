@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef} from "react";
 import useEventBus from "../../hooks/useEventBus";
 
 const ModalBackdrop = () => {
@@ -7,7 +7,6 @@ const ModalBackdrop = () => {
 
     let timer = null
     const handleModalOpened = () => {
-        console.log('modal opened')
         if (backdropRef.current) {
             backdropRef.current.style.display = 'block'
 
@@ -19,7 +18,6 @@ const ModalBackdrop = () => {
     }
 
     const handleModalClosed = () => {
-        console.log('modal closed')
         if (backdropRef.current) {
             backdropRef.current.classList.remove('show')
 

@@ -1,8 +1,11 @@
 import React, {useEffect, useRef} from "react";
 import PropTypes from "prop-types";
 import useEventBus from "../../hooks/useEventBus";
+import ModalHeader from "./ModalHeader";
+import ModalFooter from "./ModalFooter";
+import ModalBody from "./ModalBody";
 
-const Modal = ({children, show, header, footer, size, onClose}) => {
+const Modal = ({children, show, size, onClose}) => {
     const eventBus = useEventBus()
     const modalRef = useRef(null)
     const modalSizeClass = size ? 'modal-' + size : ''
@@ -33,7 +36,6 @@ const Modal = ({children, show, header, footer, size, onClose}) => {
 
         timer = setTimeout(() => {
             eventBus.emit('modalClosed')
-            modalRef.current.style.display = 'none'
             clearTimeout(timer)
         }, 300)
     }, [show]);
@@ -50,24 +52,7 @@ const Modal = ({children, show, header, footer, size, onClose}) => {
         <div className="modal fade" ref={modalRef} tabIndex="-1" role="dialog" onClick={handleModalClick}>
             <div className={`modal-dialog modal-dialog-centered ${modalSizeClass}`} role="document">
                 <div className="modal-content">
-                    {header &&
-                        <div className="modal-header">
-                            <h5 className="modal-title">{header}</h5>
-                            <button type="button" className="close" aria-label="Close" onClick={onClose}>
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    }
-
-                    <div className="modal-body">
-                        {children}
-                    </div>
-
-                    {footer &&
-                        <div className="modal-footer">
-                            {footer}
-                        </div>
-                    }
+                    {children}
                 </div>
             </div>
         </div>
@@ -76,10 +61,12 @@ const Modal = ({children, show, header, footer, size, onClose}) => {
 
 Modal.propTypes = {
     show: PropTypes.bool.isRequired,
-    header: PropTypes.string,
-    footer: PropTypes.node,
-    size: PropTypes.string,
+    size: PropTypes.oneOf(['sm', 'lg']),
     onClose: PropTypes.func.isRequired,
 }
 
-export default Modal
+export default Object.assign(Modal, {
+    Body: ModalBody,
+    Header: ModalHeader,
+    Footer: ModalFooter
+})
