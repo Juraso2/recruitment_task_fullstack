@@ -15,4 +15,12 @@ interface CurrencyHistoryInterface
     public function getSellRate(): float;
 
     public function setSellRate(float $sellRate, float $currencySellRate): void;
+
+    public function setIsHighest(bool $isHighest): void;
+
+    public function getIsHighest(): bool;
+
+    public function setIsLowest(bool $isLowest): void;
+
+    public function getIsLowest(): bool;
 }
