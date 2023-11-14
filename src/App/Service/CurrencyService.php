@@ -2,11 +2,14 @@
 
 namespace App\Service;
 
+use App\Enum\CurrencyTypeEnum;
 use App\Exception\CurrencyHistoryNotFoundException;
 use App\Exception\CurrencyNotSupportedException;
 use App\Exception\RatesNotFoundException;
 use App\Exception\RatesWithDateNotFoundException;
 use App\Exception\WrongDateException;
+use App\Factory\ProviderFactory;
+use App\Factory\ProcessorFactory;
 use App\Helper\NbpApiHelper;
 use App\Http\ApiClientInterface;
 use App\Model\Currency\CurrencyHistory;
@@ -26,16 +29,28 @@ class CurrencyService
      * @var ApiClientInterface
      */
     private $apiClient;
+    /**
+     * @var ProviderFactory
+     */
+    private $providerFactory;
+    /**
+     * @var ProcessorFactory
+     */
+    private $processorFactory;
 
     public function __construct(
         iterable           $currencies,
         NbpApiHelper       $nbpApiHelper,
-        ApiClientInterface $apiClient
+        ApiClientInterface $apiClient,
+        ProviderFactory    $providerFactory,
+        ProcessorFactory   $processorFactory
     )
     {
         $this->currencies = $currencies instanceof \Traversable ? iterator_to_array($currencies) : $currencies;
         $this->nbpApiHelper = $nbpApiHelper;
         $this->apiClient = $apiClient;
+        $this->providerFactory = $providerFactory;
+        $this->processorFactory = $processorFactory;
     }
 
     /**
@@ -100,75 +115,23 @@ class CurrencyService
 
     private function iterateHistoricalRates($history): ?CurrencyInterface
     {
-        if (!array_key_exists($history['code'], $this->currencies)) {
-            return null;
-        }
+        $processor = $this->processorFactory->create(CurrencyTypeEnum::HISTORICAL_RATES);
+        $provider = $this->providerFactory->create(CurrencyTypeEnum::HISTORICAL_RATES);
+        $provider->setCurrencies($this->currencies);
+        $provider->setProcessor($processor);
 
-        $currency = $this->currencies[$history['code']];
+        $result = $provider->provide($history);
 
-        $this->prepareCurrencyHistory($currency, $history);
-
-        return $currency;
+        return reset($result);
     }
 
     private function iterateRates($rates): array
     {
-        $currencies = [];
+        $processor = $this->processorFactory->create(CurrencyTypeEnum::RATES);
+        $provider = $this->providerFactory->create(CurrencyTypeEnum::RATES);
+        $provider->setCurrencies($this->currencies);
+        $provider->setProcessor($processor);
 
-        foreach ($rates as $currencyData) {
-            if (!array_key_exists($currencyData['code'], $this->currencies)) {
-                continue;
-            }
-
-            $currency = $this->currencies[$currencyData['code']];
-
-            $this->prepareCurrency($currency, $currencyData);
-
-            $currencies[] = $currency;
-        }
-
-        return $currencies;
-    }
-
-    private function prepareCurrencyHistory(CurrencyInterface $currency, array $currencyData): void
-    {
-        $currency->setName($currencyData['currency']);
-
-        $rates = array_column($currencyData['rates'], 'effectiveDate');
-        array_multisort($rates, SORT_DESC, $currencyData['rates']);
-
-        $highest = array_filter($currencyData['rates'], static function($rate) use($currencyData) {
-            return $rate['mid'] === max(array_column($currencyData['rates'], 'mid'));
-        });
-        $lowest = array_filter($currencyData['rates'], static function($rate) use($currencyData) {
-            return $rate['mid'] === min(array_column($currencyData['rates'], 'mid'));
-        });
-
-        foreach ($currencyData['rates'] as $rate) {
-            $currencyHistory = new CurrencyHistory($rate['effectiveDate'], $rate['mid']);
-            $currencyHistory->setPurchaseRate($rate['mid'], $currency::PURCHASE_RATE);
-            $currencyHistory->setSellRate($rate['mid'], $currency::SELL_RATE);
-            $currencyHistory->setIsHighest($rate['no'] === reset($highest)['no']);
-            $currencyHistory->setIsLowest($rate['no'] === reset($lowest)['no']);
-
-            $currency->addHistory($currencyHistory);
-        }
-
-    }
-
-    private function prepareCurrency(CurrencyInterface $currency, array $currencyData): void
-    {
-        $currency->setName($currencyData['currency']);
-        $currency->setExchangeRate($currencyData['mid']);
-        $currency->setSellRate($currencyData['mid']);
-        $currency->setPurchaseRate($currencyData['mid']);
-    }
-
-    private function prepareSingleCurrency(CurrencyInterface $currency, array $currencyData): void
-    {
-        $currency->setName($currencyData['currency']);
-        $currency->setExchangeRate($currencyData['rates'][0]['mid']);
-        $currency->setSellRate($currencyData['rates'][0]['mid']);
-        $currency->setPurchaseRate($currencyData['rates'][0]['mid']);
+        return $provider->provide($rates);
     }
 }
