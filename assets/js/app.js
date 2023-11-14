@@ -12,12 +12,25 @@
 //import './bootstrap';
 
 
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
+import {BrowserRouter as Router} from 'react-router-dom';
 import '../css/app.css';
-import Home from './components/Home';
+import Home from './pages/Home';
+import AlertProvider from "./provider/AlertProvider";
+import AlertPopup from "./components/AlertPopup";
+import ModalBackdrop from "./components/Modal/ModalBackdrop";
 
-ReactDOM.render(<Router><Home /></Router>, document.getElementById('root'));
+ReactDOM.render(
+    <Router>
+        <AlertProvider>
+            <AlertPopup/>
+
+            <Home/>
+
+            <ModalBackdrop/>
+        </AlertProvider>
+    </Router>,
+    document.getElementById('root')
+);
 

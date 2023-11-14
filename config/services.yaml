@@ -10,6 +10,17 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            $cacheDir: '%kernel.cache_dir%'
+    _instanceof:
+        App\Model\Currency\CurrencyInterface:
+            tags: [ 'app.currency' ]
+        App\Http\ApiClientInterface:
+            tags: [ 'app.api_client' ]
+        App\Provider\ProviderInterface:
+            tags: [ 'app.provider' ]
+        App\Processor\ProcessorInterface:
+            tags: [ 'app.processor' ]
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -24,7 +35,22 @@ services:
     App\Controller\:
         resource: '../src/App/Controller/'
         autowire: true
-        tags: ['controller.service_arguments']
+        tags: [ 'controller.service_arguments' ]
+
+    App\Service\CurrencyService:
+        public: true
+        bind:
+            iterable $currencies: !tagged_iterator { tag: 'app.currency', default_index_method: 'getCode' }
+
+    App\Factory\ProviderFactory:
+        public: true
+        arguments:
+            $providers: !tagged_iterator { tag: 'app.provider', default_index_method: 'support' }
+
+    App\Factory\ProcessorFactory:
+        public: true
+        arguments:
+            $processors: !tagged_iterator { tag: 'app.processor', default_index_method: 'support' }
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

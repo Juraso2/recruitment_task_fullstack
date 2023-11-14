@@ -1,3 +1,116 @@
 body {
     background-color: lightgray;
 }
+
+.flex-1 {
+    flex: 1;
+}
+
+.skeleton {
+    background: lightgray;
+    border-radius: 99px;
+    height: 18px;
+    position: relative;
+    overflow: hidden;
+}
+
+.skeleton::before {
+    content: "";
+    display: block;
+    position: absolute;
+    left: -150px;
+    top: 0;
+    height: 100%;
+    width: 150px;
+    background: linear-gradient(to right, transparent 0%, #e8e8e8 50%, transparent 100%);
+    animation: load 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes load {
+    from {
+        left: -150px;
+    }
+    to {
+        left: 100%;
+    }
+}
+
+.tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip-wrapper .tooltip {
+    position: absolute;
+    white-space: nowrap;
+    background: #000;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+}
+
+.tooltip-wrapper:hover .tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.tooltip-wrapper .tooltip::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: #000 transparent transparent transparent;
+}
+
+.tooltip-wrapper .tooltip.top {
+    top: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tooltip-wrapper .tooltip.right {
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%) translateX(10px);
+}
+
+.tooltip-wrapper .tooltip.right::after {
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%);
+    border-color: transparent #000 transparent transparent;
+}
+
+.tooltip-wrapper .tooltip.bottom {
+    top: unset;
+    bottom: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tooltip-wrapper .tooltip.bottom::after {
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-color: transparent transparent #000 transparent;
+}
+
+.tooltip-wrapper .tooltip.left {
+    top: 50%;
+    left: -10px;
+    transform: translateY(-50%) translateX(-100%);
+}
+
+.tooltip-wrapper .tooltip.left::after {
+    top: 50%;
+    left: 100%;
+    transform: translateY(-50%);
+    border-color: transparent transparent transparent #000;
+}
