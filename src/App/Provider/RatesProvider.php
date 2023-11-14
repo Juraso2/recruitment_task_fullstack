@@ -20,6 +20,10 @@ class RatesProvider implements ProviderInterface
         $currencies = [];
 
         foreach ($iterable as $currencyData) {
+            if (!array_key_exists('code', $currencyData)) {
+                continue;
+            }
+
             if (!array_key_exists($currencyData['code'], $this->currencies)) {
                 continue;
             }

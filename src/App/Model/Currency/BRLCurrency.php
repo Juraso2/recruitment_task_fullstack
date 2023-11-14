@@ -4,7 +4,7 @@ namespace App\Model\Currency;
 
 use App\Helper\NumberHelper;
 
-class BRLCurrency extends abstractCurrency
+class BRLCurrency extends AbstractCurrency
 {
     protected const CODE = 'BRL';
     public const PURCHASE_RATE = 0.00;

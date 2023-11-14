@@ -4,7 +4,7 @@ namespace App\Model\Currency;
 
 use App\Helper\NumberHelper;
 
-class CZKCurrency extends abstractCurrency
+class CZKCurrency extends AbstractCurrency
 {
     protected const CODE = 'CZK';
     public const PURCHASE_RATE = 0.00;
