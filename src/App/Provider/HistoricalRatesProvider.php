@@ -17,6 +17,10 @@ class HistoricalRatesProvider implements ProviderInterface
 
     public function provide(array $iterable): array
     {
+        if (!array_key_exists('code', $iterable)) {
+            return [];
+        }
+
         if (!array_key_exists($iterable['code'], $this->currencies)) {
             return [];
         }
