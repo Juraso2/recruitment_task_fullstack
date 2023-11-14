@@ -38,14 +38,17 @@ services:
         tags: [ 'controller.service_arguments' ]
 
     App\Service\CurrencyService:
+        public: true
         bind:
             iterable $currencies: !tagged_iterator { tag: 'app.currency', default_index_method: 'getCode' }
 
     App\Factory\ProviderFactory:
+        public: true
         arguments:
             $providers: !tagged_iterator { tag: 'app.provider', default_index_method: 'support' }
 
     App\Factory\ProcessorFactory:
+        public: true
         arguments:
             $processors: !tagged_iterator { tag: 'app.processor', default_index_method: 'support' }
 
