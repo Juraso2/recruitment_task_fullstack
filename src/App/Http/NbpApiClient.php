@@ -2,7 +2,6 @@
 
 namespace App\Http;
 
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -19,14 +18,10 @@ class NbpApiClient implements ApiClientInterface
      */
     private $cache;
 
-    public function __construct(HttpClientInterface $nbpClient, string $cacheDir)
+    public function __construct(HttpClientInterface $nbpClient, CacheInterface $cache)
     {
         $this->httpClient = $nbpClient;
-        $this->cache = new FilesystemAdapter(
-            'nbp_api',
-            3600,
-            $cacheDir . '/nbp_api'
-        );
+        $this->cache = $cache;
     }
 
     public function fetch(string $url): array
