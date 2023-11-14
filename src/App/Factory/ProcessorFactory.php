@@ -6,7 +6,7 @@ use App\Processor\ProcessorInterface;
 use InvalidArgumentException;
 use Traversable;
 
-class ProcessorFactory
+final class ProcessorFactory implements ProcessorFactoryInterface
 {
     private $processors;
 

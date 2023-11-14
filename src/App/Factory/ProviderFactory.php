@@ -4,7 +4,7 @@ namespace App\Factory;
 
 use App\Provider\ProviderInterface;
 
-class ProviderFactory
+final class ProviderFactory implements ProviderFactoryInterface
 {
     private $providers;
 
@@ -15,10 +15,12 @@ class ProviderFactory
 
     public function create(string $type): ProviderInterface
     {
-        if (array_key_exists($type, $this->providers)) {
-            return $this->providers[$type];
+        foreach ($this->providers as $provider) {
+            if ($provider->support() === $type) {
+                return $provider;
+            }
         }
 
-        throw new \InvalidArgumentException('Iterator not found');
+        throw new \InvalidArgumentException('Provider not found');
     }
 }
