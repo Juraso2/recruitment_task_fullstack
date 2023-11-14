@@ -16,11 +16,6 @@ class NbpApiHelper
         return sprintf('tables/%s', $this->apiTable);
     }
 
-    public function getApiUrlWithCode(string $code): string
-    {
-        return sprintf('rates/%s/%s', $this->apiTable, $code);
-    }
-
     public function getApiUrlWithDate(string $date): string
     {
         return sprintf('tables/%s/%s', $this->apiTable, $date);
