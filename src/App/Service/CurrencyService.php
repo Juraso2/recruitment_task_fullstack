@@ -4,15 +4,13 @@ namespace App\Service;
 
 use App\Enum\CurrencyTypeEnum;
 use App\Exception\CurrencyHistoryNotFoundException;
-use App\Exception\CurrencyNotSupportedException;
 use App\Exception\RatesNotFoundException;
 use App\Exception\RatesWithDateNotFoundException;
 use App\Exception\WrongDateException;
-use App\Factory\ProviderFactory;
-use App\Factory\ProcessorFactory;
+use App\Factory\ProcessorFactoryInterface;
+use App\Factory\ProviderFactoryInterface;
 use App\Helper\NbpApiHelper;
 use App\Http\ApiClientInterface;
-use App\Model\Currency\CurrencyHistory;
 use App\Model\Currency\CurrencyInterface;
 
 class CurrencyService
@@ -30,20 +28,20 @@ class CurrencyService
      */
     private $apiClient;
     /**
-     * @var ProviderFactory
+     * @var ProviderFactoryInterface
      */
     private $providerFactory;
     /**
-     * @var ProcessorFactory
+     * @var ProcessorFactoryInterface
      */
     private $processorFactory;
 
     public function __construct(
-        iterable           $currencies,
-        NbpApiHelper       $nbpApiHelper,
-        ApiClientInterface $apiClient,
-        ProviderFactory    $providerFactory,
-        ProcessorFactory   $processorFactory
+        iterable                  $currencies,
+        NbpApiHelper              $nbpApiHelper,
+        ApiClientInterface        $apiClient,
+        ProviderFactoryInterface  $providerFactory,
+        ProcessorFactoryInterface $processorFactory
     )
     {
         $this->currencies = $currencies instanceof \Traversable ? iterator_to_array($currencies) : $currencies;
